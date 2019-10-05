@@ -63,7 +63,7 @@ class UserTest < ActiveSupport::TestCase
     @user.save
     assert_equal mixed_case_email.downcase, @user.reload.email                  #第一引数で@userのEmailを小文字に変換、第二引数でDBからEmail(大文字小文字混同のemail)を再読み込み、この二つが同一であればtrueを返す
   end
-  
+
   test "password should be present (nonblank)" do
     @user.password = @user.password_confirmation = " " * 6
     assert_not @user.valid?
@@ -72,5 +72,9 @@ class UserTest < ActiveSupport::TestCase
   test "password should have a minimum length" do
     @user.password = @user.password_confirmation = "a" * 5
     assert_not @user.valid?
+  end
+
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?('')
   end
 end
